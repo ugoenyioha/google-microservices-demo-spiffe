@@ -67,19 +67,19 @@ public class AdServiceClient {
     } catch (StatusRuntimeException e) {
       logger.log(Level.WARN, "RPC failed: " + e.getStatus());
       return;
-    } 
+    }
     for (Ad ads : response.getAdsList()) {
       logger.info("Ads: " + ads.getText());
     }
   }
 
   private static int getPortOrDefaultFromArgs(String[] args) {
-    int portNumber = 9555;
+    int portNumber = 9556;
     if (2 < args.length) {
       try {
         portNumber = Integer.parseInt(args[2]);
       } catch (NumberFormatException e) {
-        logger.warn(String.format("Port %s is invalid, use default port %d.", args[2], 9555));
+        logger.warn(String.format("Port %s is invalid, use default port %d.", args[2], 9556));
       }
     }
     return portNumber;

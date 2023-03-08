@@ -32,6 +32,6 @@ RUN GRPC_HEALTH_PROBE_VERSION=v0.4.14 && \
     chmod +x /bin/grpc_health_probe
 WORKDIR /app
 COPY --from=publish /out .
-ENV ASPNETCORE_URLS=http://*:7070
+ENV ASPNETCORE_URLS=http://*:7076
 
 ENTRYPOINT ["dotnet", "cartservice.dll"]

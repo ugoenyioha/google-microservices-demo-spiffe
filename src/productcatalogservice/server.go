@@ -52,7 +52,7 @@ var (
 	log          *logrus.Logger
 	extraLatency time.Duration
 
-	port = "3550"
+	port = "3556"
 
 	reloadCatalog bool
 )
@@ -131,7 +131,7 @@ func main() {
 }
 
 func run(port string) string {
-	l, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
+	l, err := net.Listen("tcp", fmt.Sprintf("0.0.0.0:%s", port))
 	if err != nil {
 		log.Fatal(err)
 	}

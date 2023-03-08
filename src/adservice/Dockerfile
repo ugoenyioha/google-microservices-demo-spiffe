@@ -38,7 +38,7 @@ RUN mkdir -p /opt/cprof && \
 WORKDIR /app
 COPY --from=builder /app .
 
-EXPOSE 9555
+EXPOSE 9556
 ENTRYPOINT ["/app/build/install/hipstershop/bin/AdService"]
 
 FROM without-grpc-health-probe-bin

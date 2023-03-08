@@ -31,14 +31,14 @@ RUN apk add --no-cache ca-certificates
 
 WORKDIR /src
 COPY --from=builder /go/bin/shippingservice /src/shippingservice
-ENV APP_PORT=50051
+ENV APP_PORT=50052
 
 # Definition of this variable is used by 'skaffold debug' to identify a golang binary.
 # Default behavior - a failure prints a stack trace for the current goroutine.
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
 
-EXPOSE 50051
+EXPOSE 50052
 ENTRYPOINT ["/src/shippingservice"]
 
 FROM without-grpc-health-probe-bin

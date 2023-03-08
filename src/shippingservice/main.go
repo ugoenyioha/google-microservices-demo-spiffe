@@ -33,7 +33,7 @@ import (
 )
 
 const (
-	defaultPort = "50051"
+	defaultPort = "50052"
 )
 
 var log *logrus.Logger

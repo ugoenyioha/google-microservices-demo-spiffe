@@ -38,7 +38,7 @@ COPY --from=builder /checkoutservice /src/checkoutservice
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
 
-EXPOSE 5050
+EXPOSE 5051
 ENTRYPOINT ["/src/checkoutservice"]
 
 FROM without-grpc-health-probe-bin

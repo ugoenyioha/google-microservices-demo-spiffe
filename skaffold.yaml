@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: skaffold/v3
+apiVersion: skaffold/v4beta1
 kind: Config
 metadata:
   name: app
@@ -51,7 +51,7 @@ build:
 manifests:
   kustomize:
     paths:
-    - kubernetes-manifests
+    - kubernetes-manifests-spiffe
 deploy:
   kubectl: {}
 # "gcb" profile allows building and pushing the images
@@ -62,6 +62,10 @@ deploy:
 #
 # This is not used by default. To use it, run:
 #     skaffold run -p gcb
+portForward:
+- resourceType: service
+  resourceName: frontend
+  port: 443
 profiles:
 - name: gcb
   build:
@@ -69,7 +73,7 @@ profiles:
       diskSizeGb: 300
       machineType: N1_HIGHCPU_32
       timeout: 4000s
-# "debug" profile replaces the default Dockerfile in cartservice with Dockerfile.debug, 
+# "debug" profile replaces the default Dockerfile in cartservice with Dockerfile.debug,
 # which enables debugging via skaffold.
 #
 # This profile is used by default when running skaffold debug.
@@ -88,20 +92,22 @@ profiles:
   - op: add
     path: /manifests/kustomize/paths/1
     value: kustomize/components/network-policies
----
-apiVersion: skaffold/v3
-kind: Config
-metadata:
-  name: loadgenerator
-requires:
-- configs:
-  - app
-build:
-  artifacts:
-  - image: loadgenerator
-    context: src/loadgenerator
-manifests:
-  rawYaml:
-  - ./kubernetes-manifests/loadgenerator.yaml
-deploy:
-  kubectl: {}
+# ---
+# apiVersion: skaffold/v4beta1
+# kind: Config
+# metadata:
+#   name: loadgenerator
+# requires:
+# - configs:
+#   - app
+# build:
+#   artifacts:
+#   - image: loadgenerator
+#     context: src/loadgenerator
+# manifests:
+#   rawYaml:
+#   - ./kubernetes-manifests/loadgenerator.yaml
+# deploy:
+#   statusCheckDeadlineSeconds: 540
+#   kubectl:
+#     defaultNamespace: store

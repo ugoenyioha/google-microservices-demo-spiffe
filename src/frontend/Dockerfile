@@ -28,7 +28,7 @@ RUN go build -gcflags="${SKAFFOLD_GO_GCFLAGS}" -o /go/bin/frontend .
 
 FROM alpine:3.17.0@sha256:8914eb54f968791faf6a8638949e480fef81e697984fba772b3976835194c6d4 as release
 RUN apk add --no-cache ca-certificates \
-    busybox-extras net-tools bind-tools
+    busybox-extras net-tools bind-tools iptables
 WORKDIR /src
 COPY --from=builder /go/bin/frontend /src/server
 COPY ./templates ./templates
@@ -39,5 +39,5 @@ COPY ./static ./static
 # See https://golang.org/pkg/runtime/
 ENV GOTRACEBACK=single
 
-EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["/src/server"]

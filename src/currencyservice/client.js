@@ -22,7 +22,7 @@ const grpc = require('grpc');
 const pino = require('pino');
 
 const PROTO_PATH = path.join(__dirname, './proto/demo.proto');
-const PORT = 7000;
+const PORT = 7001;
 
 const shopProto = grpc.load(PROTO_PATH).hipstershop;
 const client = new shopProto.CurrencyService(`localhost:${PORT}`,

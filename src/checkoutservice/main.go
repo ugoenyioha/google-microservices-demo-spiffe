@@ -41,7 +41,7 @@ import (
 )
 
 const (
-	listenPort  = "5050"
+	listenPort  = "5051"
 	usdCurrency = "USD"
 )
 

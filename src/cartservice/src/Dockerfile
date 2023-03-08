@@ -25,9 +25,9 @@ FROM mcr.microsoft.com/dotnet/runtime-deps:7.0.1-alpine3.16-amd64@sha256:3674a50
 
 WORKDIR /app
 COPY --from=builder /cartservice .
-EXPOSE 7070
+EXPOSE 7076
 ENV DOTNET_EnableDiagnostics=0 \
-    ASPNETCORE_URLS=http://*:7070
+    ASPNETCORE_URLS=http://*:7071
 USER 1000
 ENTRYPOINT ["/app/cartservice"]
 
