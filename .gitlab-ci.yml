@@ -5,7 +5,7 @@ deploy:
   stage: deploy
   image: gcr.io/k8s-skaffold/skaffold:latest
   script:
-    - skaffold run --default-repo localhost:32000 --port-forward --profile cluster
+    - skaffold run --default-repo localhost:32000 --port-forward --profile  cluster
 
   only:
     - main
