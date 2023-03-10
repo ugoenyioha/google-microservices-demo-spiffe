@@ -1,0 +1,15 @@
+stages:
+  - deploy
+
+variables:
+  DOCKER_HOST: tcp://localhost:2375/
+  DOCKER_DRIVER: overlay2
+
+deploy:
+  stage: deploy
+  image: gcr.io/k8s-skaffold/skaffold:latest
+  script:
+    - skaffold run --default-repo localhost:32000 --port-forward --profile cluster
+
+  only:
+    - main
