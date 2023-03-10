@@ -1,0 +1,5 @@
+gitops:
+  manifest_projects:
+  - id: uenyioha/microservices-demo
+    paths:
+    - glob: 'runner-manifest.yaml'
