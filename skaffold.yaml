@@ -54,7 +54,6 @@ profiles:
     activation:
     - env: MAGIC_VAR=42
     build:
-      cluster: {}
       artifacts:
       # image tags are relative; to specify an image repo (e.g. GCR), you
       # must provide a "default repo" using one of the methods described
@@ -62,36 +61,46 @@ profiles:
       # https://skaffold.dev/docs/concepts/#image-repository-handling
       - image: emailservice
         context: src/emailservice
-        kaniko: {}
+        kaniko:
+          cache: {}
       - image: productcatalogservice
         context: src/productcatalogservice
-        kaniko: {}
+        kaniko:
+          cache: {}
       - image: recommendationservice
         context: src/recommendationservice
-        kaniko: {}
+        kaniko:
+          cache: {}
       - image: shippingservice
         context: src/shippingservice
-        kaniko: {}
+        kaniko:
+          cache: {}
       - image: checkoutservice
         context: src/checkoutservice
-        kaniko: {}
+        kaniko:
+          cache: {}
       - image: paymentservice
         context: src/paymentservice
-        kaniko: {}
+        kaniko:
+          cache: {}
       - image: currencyservice
         context: src/currencyservice
-        kaniko: {}
+        kaniko:
+          cache: {}
       - image: cartservice
         context: src/cartservice/src
-        kaniko: {}
+        kaniko:
+          cache: {}
         # docker:
         #   dockerfile: Dockerfile
       - image: frontend
         context: src/frontend
-        kaniko: {}
+        kaniko:
+          cache: {}
       - image: adservice
         context: src/adservice
-        kaniko: {}
+        kaniko:
+          cache: {}
       tagPolicy:
         gitCommit: {}
       local:
