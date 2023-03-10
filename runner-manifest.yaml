@@ -23,7 +23,7 @@ metadata:
     release: "gitlab-runner"
     heritage: "Helm"
 type: Opaque
-data:
+stringData:
   runner-registration-token: "GR1348941gUazsNLMzp_Vxtpxxhiz"
   runner-token: ""
 ---
