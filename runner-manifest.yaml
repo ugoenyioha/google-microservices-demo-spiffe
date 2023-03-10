@@ -24,7 +24,7 @@ metadata:
     heritage: "Helm"
 type: Opaque
 stringData:
-  runner-registration-token: "GR1348941gUazsNLMzp_Vxtpxxhiz"
+  runner-registration-token: "GR1348941NpsLu61xqGYsfoAfuRc3"
   runner-token: ""
 ---
 # Source: gitlab-runner/templates/configmap.yaml
