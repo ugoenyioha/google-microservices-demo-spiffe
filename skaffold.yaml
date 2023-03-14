@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: skaffold/v4beta1
+apiVersion: skaffold/v4beta2
 kind: Config
 metadata:
   name: app
@@ -54,6 +54,7 @@ profiles:
     activation:
     - env: MAGIC_VAR=42
     build:
+      cluster:
       artifacts:
       # image tags are relative; to specify an image repo (e.g. GCR), you
       # must provide a "default repo" using one of the methods described
