@@ -54,7 +54,6 @@ profiles:
     activation:
     - env: MAGIC_VAR=42
     build:
-      cluster: {}
       artifacts:
       # image tags are relative; to specify an image repo (e.g. GCR), you
       # must provide a "default repo" using one of the methods described
@@ -102,6 +101,7 @@ profiles:
         context: src/adservice
         kaniko:
           cache: {}
+      cluster: {}
       tagPolicy:
         gitCommit: {}
       local:
