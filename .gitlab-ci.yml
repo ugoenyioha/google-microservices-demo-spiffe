@@ -10,7 +10,7 @@ deploy:
     key:
       files:
         - ~/. skaffold/cache
-      paths:
+    paths:
       - ~/. skaffold/
   only:
     - main
