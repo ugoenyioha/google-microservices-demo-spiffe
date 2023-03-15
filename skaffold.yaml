@@ -1,172 +1,271 @@
-# Copyright 2021 Google LLC
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+# # Copyright 2021 Google LLC
+# #
+# # Licensed under the Apache License, Version 2.0 (the "License");
+# # you may not use this file except in compliance with the License.
+# # You may obtain a copy of the License at
+# #
+# #      http://www.apache.org/licenses/LICENSE-2.0
+# #
+# # Unless required by applicable law or agreed to in writing, software
+# # distributed under the License is distributed on an "AS IS" BASIS,
+# # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# # See the License for the specific language governing permissions and
+# # limitations under the License.
 
-apiVersion: skaffold/v4beta2
+# apiVersion: skaffold/v4beta2
+# kind: Config
+# metadata:
+#   name: app
+# profiles:
+#   - name: local
+#     build:
+#       artifacts:
+#       # image tags are relative; to specify an image repo (e.g. GCR), you
+#       # must provide a "default repo" using one of the methods described
+#       # here:
+#       # https://skaffold.dev/docs/concepts/#image-repository-handling
+#       - image: emailservice
+#         context: src/emailservice
+#       - image: productcatalogservice
+#         context: src/productcatalogservice
+#       - image: recommendationservice
+#         context: src/recommendationservice
+#       - image: shippingservice
+#         context: src/shippingservice
+#       - image: checkoutservice
+#         context: src/checkoutservice
+#       - image: paymentservice
+#         context: src/paymentservice
+#       - image: currencyservice
+#         context: src/currencyservice
+#       - image: cartservice
+#         context: src/cartservice/src
+#         # docker:
+#         #   dockerfile: Dockerfile
+#       - image: frontend
+#         context: src/frontend
+#       - image: adservice
+#         context: src/adservice
+#       tagPolicy:
+#         gitCommit: {}
+#       local:
+#         useBuildkit: false
+#   - name: cluster
+#     activation:
+#     - env: MAGIC_VAR=42
+#     build:
+#       artifacts:
+#       # image tags are relative; to specify an image repo (e.g. GCR), you
+#       # must provide a "default repo" using one of the methods described
+#       # here:
+#       # https://skaffold.dev/docs/concepts/#image-repository-handling
+#       - image: emailservice
+#         context: src/emailservice
+#         kaniko:
+#           cache: {}
+#       - image: productcatalogservice
+#         context: src/productcatalogservice
+#         kaniko:
+#           cache: {}
+#       - image: recommendationservice
+#         context: src/recommendationservice
+#         kaniko:
+#           cache: {}
+#       - image: shippingservice
+#         context: src/shippingservice
+#         kaniko:
+#           cache: {}
+#       - image: checkoutservice
+#         context: src/checkoutservice
+#         kaniko:
+#           cache: {}
+#       - image: paymentservice
+#         context: src/paymentservice
+#         kaniko:
+#           cache: {}
+#       - image: currencyservice
+#         context: src/currencyservice
+#         kaniko:
+#           cache: {}
+#       - image: cartservice
+#         context: src/cartservice/src
+#         kaniko:
+#           cache: {}
+#         # docker:
+#         #   dockerfile: Dockerfile
+#       - image: frontend
+#         context: src/frontend
+#         kaniko:
+#           cache: {}
+#       - image: adservice
+#         context: src/adservice
+#         kaniko:
+#           cache: {}
+#       # cluster: {}
+#       tagPolicy:
+#         gitCommit: {}
+#       local:
+#         useBuildkit: false
+#   - name: gcb
+#     build:
+#       googleCloudBuild:
+#         diskSizeGb: 300
+#         machineType: N1_HIGHCPU_32
+#         timeout: 4000s
+#   # "debug" profile replaces the default Dockerfile in cartservice with Dockerfile.debug,
+#   # which enables debugging via skaffold.
+#   #
+#   # This profile is used by default when running skaffold debug.
+#   - name: debug
+#     activation:
+#     - command: debug
+#     patches:
+#     - op: replace
+#       path: /build/artifacts/7/docker/dockerfile
+#       value: Dockerfile.debug
+#   # The "network-policies" profile is not used by default.
+#   # You can use it in isolation or in combination with other profiles:
+#   #     skaffold run -p network-policies, debug
+#   - name: network-policies
+#     patches:
+#     - op: add
+#       path: /manifests/kustomize/paths/1
+#       value: kustomize/components/network-policies
+
+# manifests:
+#   kustomize:
+#     paths:
+#     - kubernetes-manifests-spiffe
+# deploy:
+#   kubectl: {}
+# # "gcb" profile allows building and pushing the images
+# # on Google Container Builder without requiring docker
+# # installed on the developer machine. However, note that
+# # since GCB does not cache the builds, each build will
+# # start from scratch and therefore take a long time.
+# #
+# # This is not used by default. To use it, run:
+# #     skaffold run -p gcb
+# portForward:
+# - resourceType: service
+#   resourceName: frontend
+#   port: 443
+
+# # ---
+# # apiVersion: skaffold/v4beta1
+# # kind: Config
+# # metadata:
+# #   name: loadgenerator
+# # requires:
+# # - configs:
+# #   - app
+# # build:
+# #   artifacts:
+# #   - image: loadgenerator
+# #     context: src/loadgenerator
+# # manifests:
+# #   rawYaml:
+# #   - ./kubernetes-manifests/loadgenerator.yaml
+# # deploy:
+# #   statusCheckDeadlineSeconds: 540
+# #   kubectl:
+# #     defaultNamespace: store
+
+apiVersion: skaffold/v4beta3
 kind: Config
 metadata:
   name: app
+deploy:
+  kubectl: {}
+manifests:
+  kustomize:
+    paths:
+      - kubernetes-manifests-spiffe
+portForward:
+  - resourceType: service
+    resourceName: frontend
+    port: 443
+build:
+  artifacts:
+    - image: emailservice
+      context: src/emailservice
+    - image: productcatalogservice
+      context: src/productcatalogservice
+    - image: recommendationservice
+      context: src/recommendationservice
+    - image: shippingservice
+      context: src/shippingservice
+    - image: checkoutservice
+      context: src/checkoutservice
+    - image: paymentservice
+      context: src/paymentservice
+    - image: currencyservice
+      context: src/currencyservice
+    - image: cartservice
+      context: src/cartservice/src
+    - image: frontend
+      context: src/frontend
+    - image: adservice
+      context: src/adservice
+  tagPolicy:
+    gitCommit: {}
+  local:
+    useBuildkit: false
 profiles:
-  - name: local
+  - name: container
     build:
       artifacts:
-      # image tags are relative; to specify an image repo (e.g. GCR), you
-      # must provide a "default repo" using one of the methods described
-      # here:
-      # https://skaffold.dev/docs/concepts/#image-repository-handling
       - image: emailservice
         context: src/emailservice
+        kaniko: {}
       - image: productcatalogservice
         context: src/productcatalogservice
+        kaniko: {}
       - image: recommendationservice
         context: src/recommendationservice
+        kaniko: {}
       - image: shippingservice
         context: src/shippingservice
+        kaniko: {}
       - image: checkoutservice
         context: src/checkoutservice
+        kaniko: {}
       - image: paymentservice
         context: src/paymentservice
+        kaniko: {}
       - image: currencyservice
         context: src/currencyservice
+        kaniko: {}
       - image: cartservice
         context: src/cartservice/src
-        # docker:
-        #   dockerfile: Dockerfile
+        kaniko: {}
       - image: frontend
         context: src/frontend
+        kaniko: {}
       - image: adservice
         context: src/adservice
-      tagPolicy:
-        gitCommit: {}
-      local:
-        useBuildkit: false
-  - name: cluster
-    activation:
-    - env: MAGIC_VAR=42
-    build:
-      artifacts:
-      # image tags are relative; to specify an image repo (e.g. GCR), you
-      # must provide a "default repo" using one of the methods described
-      # here:
-      # https://skaffold.dev/docs/concepts/#image-repository-handling
-      - image: emailservice
-        context: src/emailservice
-        kaniko:
-          cache: {}
-      - image: productcatalogservice
-        context: src/productcatalogservice
-        kaniko:
-          cache: {}
-      - image: recommendationservice
-        context: src/recommendationservice
-        kaniko:
-          cache: {}
-      - image: shippingservice
-        context: src/shippingservice
-        kaniko:
-          cache: {}
-      - image: checkoutservice
-        context: src/checkoutservice
-        kaniko:
-          cache: {}
-      - image: paymentservice
-        context: src/paymentservice
-        kaniko:
-          cache: {}
-      - image: currencyservice
-        context: src/currencyservice
-        kaniko:
-          cache: {}
-      - image: cartservice
-        context: src/cartservice/src
-        kaniko:
-          cache: {}
-        # docker:
-        #   dockerfile: Dockerfile
-      - image: frontend
-        context: src/frontend
-        kaniko:
-          cache: {}
-      - image: adservice
-        context: src/adservice
-        kaniko:
-          cache: {}
+        kaniko: {}
       cluster: {}
       tagPolicy:
         gitCommit: {}
-      local:
-        useBuildkit: false
+      # local:
+      #   useBuildkit: false
+
   - name: gcb
     build:
       googleCloudBuild:
         diskSizeGb: 300
         machineType: N1_HIGHCPU_32
         timeout: 4000s
-  # "debug" profile replaces the default Dockerfile in cartservice with Dockerfile.debug,
-  # which enables debugging via skaffold.
-  #
-  # This profile is used by default when running skaffold debug.
   - name: debug
     activation:
-    - command: debug
+      - command: debug
     patches:
-    - op: replace
-      path: /build/artifacts/7/docker/dockerfile
-      value: Dockerfile.debug
-  # The "network-policies" profile is not used by default.
-  # You can use it in isolation or in combination with other profiles:
-  #     skaffold run -p network-policies, debug
+      - op: replace
+        path: /build/artifacts/7/docker/dockerfile
+        value: Dockerfile.debug
   - name: network-policies
     patches:
-    - op: add
-      path: /manifests/kustomize/paths/1
-      value: kustomize/components/network-policies
-
-manifests:
-  kustomize:
-    paths:
-    - kubernetes-manifests-spiffe
-deploy:
-  kubectl: {}
-# "gcb" profile allows building and pushing the images
-# on Google Container Builder without requiring docker
-# installed on the developer machine. However, note that
-# since GCB does not cache the builds, each build will
-# start from scratch and therefore take a long time.
-#
-# This is not used by default. To use it, run:
-#     skaffold run -p gcb
-portForward:
-- resourceType: service
-  resourceName: frontend
-  port: 443
-
-# ---
-# apiVersion: skaffold/v4beta1
-# kind: Config
-# metadata:
-#   name: loadgenerator
-# requires:
-# - configs:
-#   - app
-# build:
-#   artifacts:
-#   - image: loadgenerator
-#     context: src/loadgenerator
-# manifests:
-#   rawYaml:
-#   - ./kubernetes-manifests/loadgenerator.yaml
-# deploy:
-#   statusCheckDeadlineSeconds: 540
-#   kubectl:
-#     defaultNamespace: store
+      - op: add
+        path: /manifests/kustomize/paths/1
+        value: kustomize/components/network-policies
