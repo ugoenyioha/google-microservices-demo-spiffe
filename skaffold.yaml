@@ -215,7 +215,7 @@ profiles:
   - name: container
     build:
       insecureRegistries:
-        - localhost:32000
+        - 192.168.1.204:32000
       artifacts:
       - image: emailservice
         context: src/emailservice
