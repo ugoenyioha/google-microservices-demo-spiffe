@@ -6,6 +6,11 @@ deploy:
   image: gcr.io/k8s-skaffold/skaffold:latest
   script:
     - skaffold run --default-repo 192.168.1.204:32000 --port-forward --profile container
-
+  cache:
+    key:
+      files:
+        - ~/. skaffold/cache
+      paths:
+      - ~/. skaffold/
   only:
     - main
