@@ -56,7 +56,7 @@ profiles:
   - name: container
     build:
       insecureRegistries:
-      - 192.168.1.139:32000
+      - 192.168.1.204:32000
       artifacts:
       - image: emailservice
         context: src/emailservice
