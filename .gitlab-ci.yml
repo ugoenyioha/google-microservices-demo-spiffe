@@ -5,7 +5,7 @@ deploy:
   stage: deploy
   image: gcr.io/k8s-skaffold/skaffold:latest
   script:
-    - skaffold deploy --default-repo 192.168.1.204:32000 --profile container
+    - skaffold run --default-repo 192.168.1.204:32000 --profile container
   cache:
     key:
       files:
