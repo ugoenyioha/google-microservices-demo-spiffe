@@ -9,8 +9,8 @@ deploy:
   cache:
     key:
       files:
-        - ~/. skaffold/cache
+        - ~/.skaffold/cache
     paths:
-      - ~/. skaffold/
+      - ~/.skaffold/
   only:
     - main
