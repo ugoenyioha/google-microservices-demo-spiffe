@@ -17,11 +17,11 @@ metadata:
   name: shippingservice-envoy-jwt-auth-helper-config
 data:
   envoy-jwt-auth-helper.conf: |
-    socket_path = "unix:///var/run/secrets/workload-spiffe-uds/socket"
+    socket_path = "unix:///run/spire/agent-sockets/spire-agent.sock"
     host = "127.0.0.1"
     port = 9010
     jwt_mode = "jwt_svid_validator"
-    audience = "example/microservice-demo/shippingservice"
+    audience = "example.microservice-demo.shippingservice"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -72,7 +72,7 @@ data:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
               common_tls_context:
                 tls_certificate_sds_secret_configs:
-                - name: "spiffe://usableapps.io/example/microservice-demo/shippingservice"
+                - name: "spiffe://home.usableapps.io/example.microservice-demo.shippingservice"
                   sds_config:
                     resource_api_version: V3
                     api_config_source:
@@ -85,7 +85,7 @@ data:
                   ecdh_curves: X25519:P-256:P-521:P-384
                 combined_validation_context:
                   validation_context_sds_secret_config:
-                    name: "spiffe://usableapps.io"
+                    name: "spiffe://home.usableapps.io"
                     sds_config:
                       resource_api_version: V3
                       api_config_source:
@@ -99,10 +99,10 @@ data:
                     match_typed_subject_alt_names:
                     - san_type: URI
                       matcher:
-                        exact: "spiffe://usableapps.io/example/microservice-demo/frontend"
+                        exact: "spiffe://home.usableapps.io/example.microservice-demo.frontend"
                     - san_type: URI
                       matcher:
-                        exact: "spiffe://usableapps.io/example/microservice-demo/checkoutservice"
+                        exact: "spiffe://home.usableapps.io/example.microservice-demo.checkoutservice"
       clusters:
       - name: local_service
         connect_timeout: 0.25s
@@ -138,7 +138,7 @@ data:
             - endpoint:
                 address:
                   pipe:
-                    path: /var/run/secrets/workload-spiffe-uds/socket
+                    path: /run/spire/agent-sockets/spire-agent.sock
 ---
 apiVersion: v1
 kind: Service
@@ -165,8 +165,7 @@ spec:
     metadata:
       labels:
         app: shippingservice
-      annotations:
-        spiffe.io/spiffe-id: example/microservice-demo/shippingservice
+        spiffe.io/spiffe-id: example.microservice-demo.shippingservice
     spec:
       serviceAccountName: default
       securityContext:
@@ -217,7 +216,7 @@ spec:
           mountPath: "/run/envoy"
           readOnly: true
         - name: spire-agent-socket
-          mountPath: /var/run/secrets/workload-spiffe-uds
+          mountPath: /run/spire/agent-sockets
           readOnly: true
       - name: auth-helper
         image: us.gcr.io/scytale-registry/envoy-jwt-auth-helper@sha256:e55ce5fd42f13c5475b285a848c5f83bc4a335a93d7f934d3ac884920045fc96
@@ -230,12 +229,12 @@ spec:
           mountPath: "/run/envoy-jwt-auth-helper/config"
           readOnly: true
         - name: spire-agent-socket
-          mountPath: /var/run/secrets/workload-spiffe-uds
+          mountPath: /run/spire/agent-sockets
           readOnly: true
       volumes:
         - name: spire-agent-socket
           hostPath:
-            path: /var/run/secrets/workload-spiffe-uds
+            path: /run/spire/agent-sockets
             type: Directory
         - name: shippingservice-envoy-config
           configMap:

@@ -17,11 +17,11 @@ metadata:
   name: adservice-envoy-jwt-auth-helper-config
 data:
   envoy-jwt-auth-helper.conf: |
-    socket_path = "unix:///var/run/secrets/workload-spiffe-uds/socket"
+    socket_path = "unix:///run/spire/agent-sockets/spire-agent.sock"
     host = "127.0.0.1"
     port = 9010
     jwt_mode = "jwt_svid_validator"
-    audience = "example/microservice-demo/adservice"
+    audience = "example.microservice-demo.adservice"
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -72,7 +72,7 @@ data:
               "@type": type.googleapis.com/envoy.extensions.transport_sockets.tls.v3.DownstreamTlsContext
               common_tls_context:
                 tls_certificate_sds_secret_configs:
-                - name: "spiffe://usableapps.io/example/microservice-demo/adservice"
+                - name: "spiffe://home.usableapps.io/example.microservice-demo.adservice"
                   sds_config:
                     resource_api_version: V3
                     api_config_source:
@@ -83,7 +83,7 @@ data:
                           cluster_name: spire_agent
                 combined_validation_context:
                   validation_context_sds_secret_config:
-                    name: "spiffe://usableapps.io"
+                    name: "spiffe://home.usableapps.io"
                     sds_config:
                       resource_api_version: V3
                       api_config_source:
@@ -97,7 +97,7 @@ data:
                     match_typed_subject_alt_names:
                     - san_type: URI
                       matcher:
-                        exact: "spiffe://usableapps.io/example/microservice-demo/frontend"
+                        exact: "spiffe://home.usableapps.io/example.microservice-demo.frontend"
                 tls_params:
                   ecdh_curves: X25519:P-256:P-521:P-384
       clusters:
@@ -135,7 +135,7 @@ data:
             - endpoint:
                 address:
                   pipe:
-                    path: /var/run/secrets/workload-spiffe-uds/socket
+                    path: /run/spire/agent-sockets/spire-agent.sock
 ---
 apiVersion: v1
 kind: Service
@@ -162,9 +162,7 @@ spec:
     metadata:
       labels:
         app: adservice
-        enable_identity_template: "true"
-      annotations:
-        spiffe.io/spiffe-id: example/microservice-demo/adservice
+        spiffe.io/spiffe-id: example.microservice-demo.adservice
     spec:
       serviceAccountName: default
       terminationGracePeriodSeconds: 5
@@ -217,7 +215,7 @@ spec:
           mountPath: "/run/envoy"
           readOnly: true
         - name: spire-agent-socket
-          mountPath: /var/run/secrets/workload-spiffe-uds
+          mountPath: /run/spire/agent-sockets
           readOnly: true
       - name: auth-helper
         image: us.gcr.io/scytale-registry/envoy-jwt-auth-helper@sha256:e55ce5fd42f13c5475b285a848c5f83bc4a335a93d7f934d3ac884920045fc96
@@ -230,12 +228,12 @@ spec:
           mountPath: "/run/envoy-jwt-auth-helper/config"
           readOnly: true
         - name: spire-agent-socket
-          mountPath: /var/run/secrets/workload-spiffe-uds
+          mountPath: /run/spire/agent-sockets
           readOnly: true
       volumes:
         - name: spire-agent-socket
           hostPath:
-            path: /var/run/secrets/workload-spiffe-uds
+            path: /run/spire/agent-sockets
             type: Directory
         - name: adservice-envoy-config
           configMap:

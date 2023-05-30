@@ -24,8 +24,7 @@ spec:
     metadata:
       labels:
         app: redis-cart
-      annotations:
-        spiffe.io/spiffe-id: example/microservice-demo/redis-cart
+        spiffe.io/spiffe-id: example.microservice-demo.redis-cart
     spec:
       securityContext:
         fsGroup: 1000

@@ -48,22 +48,32 @@ seccompProfile:
 adService:
   create: true
   name: adservice
+  cloud: aws
+  form: vm
 
 cartService:
   create: true
   name: cartservice
+  cloud: onprem
+  where: k8s
 
 checkoutService:
   create: true
   name: checkoutservice
+  cloud: aws
+  where: k8s
 
 currencyService:
   create: true
   name: currencyservice
+  cloud: aws
+  where: k8s
 
 emailService:
   create: true
   name: emailservice
+  cloud: azure
+  where: k8s
 
 frontend:
   create: true
@@ -87,24 +97,34 @@ loadGenerator:
   create: true
   name: loadgenerator
   checkFrontendInitContainer: true
+  cloud: aws
+  where: k8s
 
 paymentService:
   create: true
   name: paymentservice
+  cloud: aws
+  where: k8s
 
 productCatalogService:
   create: true
   name: productcatalogservice
   # Specifies an extra latency to any request on productcatalogservice, by default no extra latency.
   extraLatency: ""
+  cloud: aws
+  where: k8s
 
 recommendationService:
   create: true
   name: recommendationservice
+  cloud: aws
+  where: k8s
 
 shippingService:
   create: true
   name: shippingservice
+  cloud: aws
+  where: k8s
 
 cartDatabase:
   # Specifies the type of the cartservice's database, could be either redis or spanner.
@@ -121,3 +141,5 @@ cartDatabase:
     endpointAddress: ""
     endpointPort: ""
     certificate: ""
+    cloud: aws
+    where: k8s
