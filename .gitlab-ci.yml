@@ -1,11 +1,11 @@
 stages:
   - deploy
 
-deploy:
+build:
   stage: deploy
   image: gcr.io/k8s-skaffold/skaffold:latest
   script:
-    - skaffold run --default-repo 192.168.1.204:32000 --profile container
+    - skaffold build --default-repo registry.usableapps.io/uenyioha/microservices-demo
   cache:
     key:
       files:
